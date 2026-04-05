@@ -6,6 +6,13 @@ ascii_table= pd.read_csv("ascii-table.csv")
 # print(ascii_table)
 ascii_table_characters = ascii_table.iloc[33:126]
 # print(ascii_table_characters)
+# TO DO
+# 1. create 3 dataframes of special, upper and lowercase characters
+# 2. maybe add selectors and character password length to generate appropriate password user requests
+# 3. Build file reader and export to save and overwrite an existing password_manager_data_file.txt as user creates and save more passwords
+# 4. Maybe form validation to entry windows to provide front-end error handling
+# 5.
+# 6.
 # ---------------------------- CONSTANTS ------------------------------- #
 # ---------------------------- GLOBAL VARIABLES ------------------------------- #
 
