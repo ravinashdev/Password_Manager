@@ -1,15 +1,20 @@
 # ---------------------------- IMPORTS ------------------------------- #
 from tkinter import *
-
+import pandas as pd
+# ---------------------------- PANDAS ------------------------------- #
+ascii_table= pd.read_csv("ascii-table.csv")
+# print(ascii_table)
+ascii_table_characters = ascii_table.iloc[33:126]
+# print(ascii_table_characters)
 # ---------------------------- CONSTANTS ------------------------------- #
-
 # ---------------------------- GLOBAL VARIABLES ------------------------------- #
 
 # ---------------------------- FUNCTIONS ------------------------------- #
 def generate_password():
-    print("Generating Password")
+    # print("Generating Password")
+    pass
 def add_password():
-    print("Adding Password")
+    # print("Adding Password")
     # Get all entries with helper functions
     website = website_entry_getter()
     email = email_username_entry_getter()
