@@ -27,6 +27,11 @@ def generate_password():
     password_entry.delete(0, "end")
     password_entry.insert(0,generated_password)
     # ---------------------------- ADD_PASSWORD_BUTTON_COMMANDS ------------------------------- #
+        # -------------- ADD_TO_BOTH_DATA_AND_JSON_FILE --------------- #
+def add_password_record_to_data_and_json_file():
+    add_password_record_to_data_file()
+    add_password_record_to_json_file()
+        # -------------- ADD_TO_DATA_FILE --------------- #
 def add_password_record_to_data_file():
     # print("Adding Password")
     # Get all entries with helper functions
@@ -62,9 +67,8 @@ def add_password_record_to_data_file():
                     messagebox.showerror("Duplicate Record", "Duplicate Record")
                 elif password_record not in file_content:
                     filemanager.append_to_file("password_data.txt", password_record)
-            finally:
-                # raise
-                file_content.close()
+
+        # -------------- ADD_TO_JSON_FILE --------------- #
 def add_password_record_to_json_file():
     # print("Adding Password")
     # Get all entries with helper functions
@@ -106,7 +110,6 @@ def add_password_record_to_json_file():
                     json.dump(password_record_dictionary, password_data_json_file)
                     website_entry.delete(0, "end")
                     password_entry.delete(0, "end")
-
 
     # ---------------------------- WEBSITE_ENTRY_GETTER ------------------------------- #
 def website_entry_getter():
@@ -155,6 +158,7 @@ website_entry.grid(ipadx=20,row=1, column=1, columnspan=1, sticky="ew")
 website_entry.focus()
 email_username_entry = Entry(window, width=35)
 email_username_entry.grid(ipadx=20,row=2, column=1, columnspan=2, sticky="ew")
+# Default email entry for testing so I don't need to type everytime'
 email_username_entry.insert(0, "ryan@email.com")
 password_entry = Entry(window, width=21)
 password_entry.grid(ipadx=20,row=3, column=1, columnspan=1, sticky="ew")
@@ -167,7 +171,8 @@ password_character_length_spinbox.grid(ipadx=20,row=4, column=1, columnspan=2, s
 generate_password_button = Button(text="Generate Password", command=lambda: generate_password())
 generate_password_button.grid(ipadx=20,row=3, column=2, columnspan=1, sticky="ew")
 # add_button = Button(width=36, text="Add", command=lambda: add_password_record_to_data_file())
-add_button = Button(width=36, text="Add", command=lambda: add_password_record_to_json_file())
+# add_button = Button(width=36, text="Add", command=lambda: add_password_record_to_json_file())
+add_button = Button(width=36, text="Add", command=lambda: add_password_record_to_data_and_json_file())
 add_button.grid(ipadx=20,row=5, column=1 , columnspan=2, sticky="ew")
 search_button = Button(text="Search")
 search_button.grid(ipadx=20,row=1, column=2, columnspan=1, sticky="ew")
