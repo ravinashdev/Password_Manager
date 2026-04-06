@@ -4,6 +4,7 @@ from tkinter import messagebox
 import pandas as pd
 from file_manager import FileManager
 from random import *
+import json
 # ---------------------------- PANDAS ------------------------------- #
 ascii_table= pd.read_csv("ascii-table.csv")
 # print(ascii_table)
@@ -25,8 +26,8 @@ def generate_password():
     # clear existing entry if user chooses to keep generating new passwords
     password_entry.delete(0, "end")
     password_entry.insert(0,generated_password)
-    # ---------------------------- ADD_PASSWORD_BUTTON_COMMAND ------------------------------- #
-def add_password_record():
+    # ---------------------------- ADD_PASSWORD_BUTTON_COMMANDS ------------------------------- #
+def add_password_record_to_data_file():
     # print("Adding Password")
     # Get all entries with helper functions
     website = website_entry_getter()
@@ -62,7 +63,31 @@ def add_password_record():
                 elif password_record not in file_content:
                     filemanager.append_to_file("password_data.txt", password_record)
             finally:
+                # raise
                 file_content.close()
+def add_password_record_to_json_file():
+    # print("Adding Password")
+    # Get all entries with helper functions
+    website = website_entry_getter()
+    email = email_username_entry_getter()
+    password = password_entry_getter()
+    # Create a type of form validation so user cannot add a record unless all fields all filled out
+    # Return booleans TRUE/FALSE
+    if not website.strip() or not email.strip() or not password.strip():
+        messagebox.showerror("Missing Data", "Please enter all required information")
+    else:
+        # Ask user to confirm submission to give them a chance to edit mistakes
+        # Create a validator so duplicate entries are not written to the file
+        # Read the existing file if it exists function moves to else condition
+        filemanager = FileManager()
+        # Return booleans TRUE/FALSE
+        confirmation = messagebox.askyesno("Confirmation", f"Do you wish to continue? \n Website: {website}\nEmail: {email}\nPassword: {password}")
+        if confirmation:
+            try:
+                pass
+            except FileExistsError:
+                pass
+
 
     # ---------------------------- WEBSITE_ENTRY_GETTER ------------------------------- #
 def website_entry_getter():
@@ -122,7 +147,8 @@ password_character_length_spinbox.grid(ipadx=20,row=4, column=1, columnspan=2, s
 # Buttons
 generate_password_button = Button(text="Generate Password", command=lambda: generate_password())
 generate_password_button.grid(ipadx=20,row=3, column=2, columnspan=1, sticky="ew")
-add_button = Button(width=36, text="Add", command=lambda: add_password_record())
+# add_button = Button(width=36, text="Add", command=lambda: add_password_record_to_data_file())
+add_button = Button(width=36, text="Add", command=lambda: add_password_record_to_json_file())
 add_button.grid(ipadx=20,row=5, column=1 , columnspan=2, sticky="ew")
 # Keep window object open so it doesn't close
 window.mainloop()

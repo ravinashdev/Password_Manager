@@ -26,6 +26,7 @@ class FileManager(Path):
             print("File written")
         except FileExistsError:
             print("File already exists")
+            raise FileExistsError
     # Append to file
     def append_to_file(self, relative_path, content):
         full_path = self.absolute_path + "/" + relative_path
