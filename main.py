@@ -61,6 +61,8 @@ def add_password_record():
                     messagebox.showerror("Duplicate Record", "Duplicate Record")
                 elif password_record not in file_content:
                     filemanager.append_to_file("password_data.txt", password_record)
+            finally:
+                file_content.close()
 
     # ---------------------------- WEBSITE_ENTRY_GETTER ------------------------------- #
 def website_entry_getter():
