@@ -1,5 +1,7 @@
 # ---------------------------- IMPORTS ------------------------------- #
 from tkinter import *
+from tkinter import messagebox
+
 import pandas as pd
 from file_manager import FileManager
 from random import *
@@ -15,8 +17,6 @@ ascii_table_dictionary = { index:row["Character"] for (index,row) in ascii_table
 # ---------------------------- FUNCTIONS ------------------------------- #
 # ---------------------------- GENERATE_PASSWORD_BUTTON_COMMAND ------------------------------- #
 def generate_password():
-    # print("Generating Password")
-    # print(ascii_table_dictionary)
     generated_password= ""
     password_character_length = int(password_character_length_spinbox.get())
     for i in range (password_character_length):
@@ -27,15 +27,19 @@ def generate_password():
     password_entry.delete(0, "end")
     password_entry.insert(0,generated_password)
     # ---------------------------- ADD_PASSWORD_BUTTON_COMMAND ------------------------------- #
-def add_password():
+def add_password_record():
     # print("Adding Password")
     # Get all entries with helper functions
     website = website_entry_getter()
     email = email_username_entry_getter()
     password = password_entry_getter()
-    password_record = website + " | " + email + " | " + password + "\n"
-    filemanager = FileManager()
-    filemanager.append_to_file("password_data.txt", password_record)
+    # Create a type of form validation so user cannot add a record unless all fields all filled out
+    if not website.strip() or not email.strip() or not password.strip():
+        messagebox.showerror("Error", "Please enter all required information")
+    else:
+        password_record = website + " | " + email + " | " + password + "\n"
+        filemanager = FileManager()
+        filemanager.append_to_file("password_data.txt", password_record)
 
     # ---------------------------- WEBSITE_ENTRY_GETTER ------------------------------- #
 def website_entry_getter():
@@ -95,7 +99,7 @@ password_character_length_spinbox.grid(ipadx=20,row=4, column=1, columnspan=2, s
 # Buttons
 generate_password_button = Button(text="Generate Password", command=lambda: generate_password())
 generate_password_button.grid(ipadx=20,row=3, column=2, columnspan=1, sticky="ew")
-add_button = Button(width=36,text="Add", command=lambda: add_password())
+add_button = Button(width=36, text="Add", command=lambda: add_password_record())
 add_button.grid(ipadx=20,row=5, column=1 , columnspan=2, sticky="ew")
 # Keep window object open so it doesn't close
 window.mainloop()
