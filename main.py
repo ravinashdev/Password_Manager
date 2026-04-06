@@ -35,11 +35,29 @@ def add_password_record():
     password = password_entry_getter()
     # Create a type of form validation so user cannot add a record unless all fields all filled out
     if not website.strip() or not email.strip() or not password.strip():
-        messagebox.showerror("Error", "Please enter all required information")
+        messagebox.showerror("Missing Data", "Please enter all required information")
     else:
-        password_record = website + " | " + email + " | " + password + "\n"
+        # Create a validator so duplicate entries are not written to the file
+        # Read the existing file if it exists
         filemanager = FileManager()
-        filemanager.append_to_file("password_data.txt", password_record)
+        try:
+            file_content = filemanager.read_file("password_data.txt")
+        except FileNotFoundError:
+            # Error handling
+            # print("Error: The file was not found.")
+            messagebox.showerror("File Not Found", "Existing file not found new file being created")
+            # Create a new file if it's the users first time using the application
+            # If so create a new file
+            password_record = website + " | " + email + " | " + password + "\n"
+            filemanager.append_to_file("password_data.txt", password_record)
+        else:
+            password_record = website + " | " + email + " | " + password + "\n"
+            # Prevent user from entering the same record twice
+            if password_record in file_content:
+                messagebox.showerror("Duplicate Record", "Duplicate Record")
+            elif password_record not in file_content:
+                filemanager.append_to_file("password_data.txt", password_record)
+
 
     # ---------------------------- WEBSITE_ENTRY_GETTER ------------------------------- #
 def website_entry_getter():
