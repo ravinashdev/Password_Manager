@@ -1,7 +1,6 @@
 # ---------------------------- IMPORTS ------------------------------- #
 from tkinter import *
 from tkinter import messagebox
-
 import pandas as pd
 from file_manager import FileManager
 from random import *
@@ -34,30 +33,34 @@ def add_password_record():
     email = email_username_entry_getter()
     password = password_entry_getter()
     # Create a type of form validation so user cannot add a record unless all fields all filled out
+    # Return booleans TRUE/FALSE
     if not website.strip() or not email.strip() or not password.strip():
         messagebox.showerror("Missing Data", "Please enter all required information")
     else:
+        # Ask user to confirm submission to give them a chance to edit mistakes
         # Create a validator so duplicate entries are not written to the file
         # Read the existing file if it exists function moves to else condition
         filemanager = FileManager()
-        try:
-            file_content = filemanager.read_file("password_data.txt")
-        except FileNotFoundError:
-            # Error handling
-            # print("Error: The file was not found.")
-            messagebox.showerror("File Not Found", "Existing file not found new file being created")
-            # Create a new file if it's the users first time using the application
-            # If so create a new file
-            password_record = website + " | " + email + " | " + password + "\n"
-            filemanager.append_to_file("password_data.txt", password_record)
-        else:
-            password_record = website + " | " + email + " | " + password + "\n"
-            # Prevent user from entering the same record twice
-            if password_record in file_content:
-                messagebox.showerror("Duplicate Record", "Duplicate Record")
-            elif password_record not in file_content:
+        # Return booleans TRUE/FALSE
+        confirmation = messagebox.askyesno("Confirmation", f"Do you wish to continue? \n Website: {website}\nEmail: {email}\nPassword: {password}")
+        if confirmation:
+            try:
+                file_content = filemanager.read_file("password_data.txt")
+            except FileNotFoundError:
+                # Error handling
+                # print("Error: The file was not found.")
+                messagebox.showerror("File Not Found", "Existing file not found new file being created")
+                # Create a new file if it's the users first time using the application
+                # If so create a new file
+                password_record = website + " | " + email + " | " + password + "\n"
                 filemanager.append_to_file("password_data.txt", password_record)
-
+            else:
+                password_record = website + " | " + email + " | " + password + "\n"
+                # Prevent user from entering the same record twice
+                if password_record in file_content:
+                    messagebox.showerror("Duplicate Record", "Duplicate Record")
+                elif password_record not in file_content:
+                    filemanager.append_to_file("password_data.txt", password_record)
 
     # ---------------------------- WEBSITE_ENTRY_GETTER ------------------------------- #
 def website_entry_getter():
