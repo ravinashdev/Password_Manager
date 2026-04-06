@@ -48,7 +48,7 @@ def add_password_record_to_data_file():
         # Read the existing file if it exists function moves to else condition
         filemanager = FileManager()
         # Return booleans TRUE/FALSE
-        confirmation = messagebox.askyesno("Confirmation", f"Do you wish to continue? \n Website: {website}\nEmail: {email}\nPassword: {password}")
+        confirmation = messagebox.askyesno("Confirmation", f"Do you wish to continue to add to .txt file? \n Website: {website}\nEmail: {email}\nPassword: {password}")
         if confirmation:
             try:
                 file_content = filemanager.read_file("password_data.txt")
@@ -84,7 +84,7 @@ def add_password_record_to_json_file():
         # Create a validator so duplicate entries are not written to the file
         # Read the existing file if it exists function moves to else condition
         # Return booleans TRUE/FALSE
-        confirmation = messagebox.askyesno("Confirmation", f"Do you wish to continue? \n Website: {website}\nEmail: {email}\nPassword: {password}")
+        confirmation = messagebox.askyesno("Confirmation", f"Do you wish to continue to add to .json file? \n Website: {website}\nEmail: {email}\nPassword: {password}")
         if confirmation:
             password_record_dictionary = {
                 website: {
