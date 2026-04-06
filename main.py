@@ -79,14 +79,33 @@ def add_password_record_to_json_file():
         # Ask user to confirm submission to give them a chance to edit mistakes
         # Create a validator so duplicate entries are not written to the file
         # Read the existing file if it exists function moves to else condition
-        filemanager = FileManager()
         # Return booleans TRUE/FALSE
         confirmation = messagebox.askyesno("Confirmation", f"Do you wish to continue? \n Website: {website}\nEmail: {email}\nPassword: {password}")
         if confirmation:
+            password_record_dictionary = {
+                website: {
+                    "Email": email,
+                    "Password": password
+                }
+            }
             try:
-                pass
-            except FileExistsError:
-                pass
+                # Read the existing file
+                with open("password_data.json", "r") as password_data_json_file:
+                    json_data = json.load(password_data_json_file)
+                # Update json_data to the file and save to it
+                json_data.update(password_record_dictionary)
+                # Open and write back that updated data to the existing file
+                with open("password_data.json", "w") as password_data_json_file:
+                    json.dump(json_data, password_data_json_file)
+                    # Delete the entry fields so user doesn't add the same record again'
+                    website_entry.delete(0, "end")
+                    password_entry.delete(0, "end")
+            except (FileNotFoundError, json.JSONDecodeError):
+                # This is the exception for when the user creates the first record
+                with open("password_data.json", "w") as password_data_json_file:
+                    json.dump(password_record_dictionary, password_data_json_file)
+                    website_entry.delete(0, "end")
+                    password_entry.delete(0, "end")
 
 
     # ---------------------------- WEBSITE_ENTRY_GETTER ------------------------------- #
@@ -130,8 +149,8 @@ password_character_length_label = Label(window, text="Password Gen Char Length:"
 password_character_length_label.grid(ipadx=20,row=4, column=0, columnspan=1, sticky="ew")
 
 # Entry Fields
-website_entry = Entry(window,width=35)
-website_entry.grid(ipadx=20,row=1, column=1, columnspan=2, sticky="ew")
+website_entry = Entry(window,width=21)
+website_entry.grid(ipadx=20,row=1, column=1, columnspan=1, sticky="ew")
 # Place cursor in first entry box
 website_entry.focus()
 email_username_entry = Entry(window, width=35)
@@ -150,5 +169,7 @@ generate_password_button.grid(ipadx=20,row=3, column=2, columnspan=1, sticky="ew
 # add_button = Button(width=36, text="Add", command=lambda: add_password_record_to_data_file())
 add_button = Button(width=36, text="Add", command=lambda: add_password_record_to_json_file())
 add_button.grid(ipadx=20,row=5, column=1 , columnspan=2, sticky="ew")
+search_button = Button(text="Search")
+search_button.grid(ipadx=20,row=1, column=2, columnspan=1, sticky="ew")
 # Keep window object open so it doesn't close
 window.mainloop()
