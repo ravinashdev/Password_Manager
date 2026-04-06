@@ -38,7 +38,7 @@ def add_password_record():
         messagebox.showerror("Missing Data", "Please enter all required information")
     else:
         # Create a validator so duplicate entries are not written to the file
-        # Read the existing file if it exists
+        # Read the existing file if it exists function moves to else condition
         filemanager = FileManager()
         try:
             file_content = filemanager.read_file("password_data.txt")
