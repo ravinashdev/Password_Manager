@@ -15,7 +15,30 @@ ascii_table_dictionary = { index:row["Character"] for (index,row) in ascii_table
 # ---------------------------- CONSTANTS ------------------------------- #
 # ---------------------------- GLOBAL VARIABLES ------------------------------- #
 # ---------------------------- FUNCTIONS ------------------------------- #
-# ---------------------------- GENERATE_PASSWORD_BUTTON_COMMAND ------------------------------- #
+    # ---------------------------- SEARCH_JSON_BUTTON_COMMAND ------------------------------- #
+def search_json_file():
+    # Retrieve the search term from the website entry field
+    search_term = website_entry_getter()
+    try:
+        # Read the existing file
+        with open("password_data.json", "r") as password_data_json_file:
+            json_data = json.load(password_data_json_file)
+        record = json_data[search_term]
+        # Retrieve Record Website, Email & Password
+        record_website = search_term.title()
+        record_email = record["Email"]
+        record_password = record["Password"]
+        # Delete any entries already in the fields
+        website_entry.delete(0, "end")
+        website_entry.insert(0,record_website)
+        # Replace the entry fields with the located record
+        email_username_entry.insert(0,record_email)
+        password_entry.insert(0,record_password)
+    except KeyError:
+        messagebox.showerror("Item not found", "Record does not exist: \nPlease add")
+
+
+    # ---------------------------- GENERATE_PASSWORD_BUTTON_COMMAND ------------------------------- #
 def generate_password():
     generated_password= ""
     password_character_length = int(password_character_length_spinbox.get())
@@ -113,7 +136,7 @@ def add_password_record_to_json_file():
 
     # ---------------------------- WEBSITE_ENTRY_GETTER ------------------------------- #
 def website_entry_getter():
-    website = website_entry.get()
+    website = website_entry.get().lower()
     return website
     # ---------------------------- EMAIL/USERNAME_ENTRY_GETTER ------------------------------- #
 def email_username_entry_getter():
@@ -159,7 +182,7 @@ website_entry.focus()
 email_username_entry = Entry(window, width=35)
 email_username_entry.grid(ipadx=20,row=2, column=1, columnspan=2, sticky="ew")
 # Default email entry for testing so I don't need to type everytime'
-email_username_entry.insert(0, "ryan@email.com")
+# email_username_entry.insert(0, "ryan@email.com")
 password_entry = Entry(window, width=21)
 password_entry.grid(ipadx=20,row=3, column=1, columnspan=1, sticky="ew")
 
@@ -174,7 +197,7 @@ generate_password_button.grid(ipadx=20,row=3, column=2, columnspan=1, sticky="ew
 # add_button = Button(width=36, text="Add", command=lambda: add_password_record_to_json_file())
 add_button = Button(width=36, text="Add", command=lambda: add_password_record_to_data_and_json_file())
 add_button.grid(ipadx=20,row=5, column=1 , columnspan=2, sticky="ew")
-search_button = Button(text="Search")
+search_button = Button(text="Search", command= lambda:search_json_file() )
 search_button.grid(ipadx=20,row=1, column=2, columnspan=1, sticky="ew")
 # Keep window object open so it doesn't close
 window.mainloop()
